@@ -2,7 +2,7 @@ import 'package:auto_aula/online_watcher.dart';
 import 'package:auto_aula/providers/data_provider.dart';
 import 'package:auto_aula/types/online_class.dart';
 import 'package:meta/meta.dart';
-import 'package:puppeteer/puppeteer.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:riverpod/riverpod.dart';
 
 @immutable
@@ -14,9 +14,15 @@ class BrowserReady extends BrowserState {}
 
 class LaunchingBrowser extends BrowserState {}
 
+enum ExamOption { a, b, c, d, e }
+
 class MakingExam extends BrowserState {
-  MakingExam(this.end);
+  MakingExam({
+    required this.end,
+    required this.answers,
+  });
   final DateTime end;
+  final Map<int, ExamOption> answers;
 }
 
 class WatchingClasses extends BrowserState {
@@ -25,9 +31,12 @@ class WatchingClasses extends BrowserState {
 }
 
 class BrowserException extends BrowserState {
-  BrowserException({this.exception, this.reason});
+  BrowserException({
+    required this.exception,
+    required this.reason,
+  });
   final String reason;
-  final Exception exception;
+  final Object exception;
 }
 
 final browserProvider = StateNotifierProvider<BrowserNotifier>(
@@ -55,13 +64,9 @@ class BrowserNotifier extends StateNotifier<BrowserState> {
   }
   final DataState _dataState;
   bool _initialized = false;
-  OnlineWatcher _onlineWatcher;
-  Browser browser;
-  Page page;
-  String pathtochrome;
+  late final OnlineWatcher _onlineWatcher;
   Future<void> _init() async {
     await _onlineWatcher.init();
-    pathtochrome = _onlineWatcher.pathToChrome;
   }
 
   Future<void> start() async {
@@ -74,7 +79,7 @@ class BrowserNotifier extends StateNotifier<BrowserState> {
       }
       await _onlineWatcher.dispose();
     } catch (e) {
-      state = BrowserException(exception: e);
+      state = BrowserException(exception: e, reason: '');
     }
   }
 }

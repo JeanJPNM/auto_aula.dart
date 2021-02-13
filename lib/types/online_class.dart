@@ -4,5 +4,5 @@ class OnlineClass {
     start = DateTime(now.year, now.month, now.day, hour, minute);
     end = start.add(const Duration(minutes: 50));
   }
-  DateTime start, end;
+  late DateTime start, end;
 }

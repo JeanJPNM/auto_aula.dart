@@ -1,7 +1,8 @@
 import 'package:auto_aula/providers/browser_provider.dart';
 import 'package:auto_aula/providers/data_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -22,7 +23,7 @@ class _OnlineProgress extends StatefulWidget {
 }
 
 class __OnlineProgressState extends State<_OnlineProgress> {
-  TextEditingController userController, passwordController;
+  late TextEditingController userController, passwordController;
 
   @override
   void initState() {
@@ -73,8 +74,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
           if (browserState is BrowserIdle) {
             return Center(
               child: OutlinedButton(
-                child:
-                    Text('Assistir às aulas: ${browserNotifier.pathtochrome}'),
+                child: Text('Assistir às aulas'),
                 onPressed: () {
                   browserNotifier.start();
                 },

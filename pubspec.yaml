@@ -1,5 +1,5 @@
 name: auto_aula
-description: A new Flutter project.
+description: 'Auto Aula: Automatize a entrada de aulas online'
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -23,15 +23,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  puppeteer: ^1.22.0
+  riverpod: ^0.11.0
+  flutter_riverpod: ^0.11.0
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
+  path_provider: ^1.6.27
+  path: ^1.7.0
+  dart_app_data: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  msix: ^0.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -74,3 +78,19 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+msix_config:
+  display_name: Auto Aula
+  publisher_display_name: JeanJPNM
+  identity_name: JeanJPNM.AutoAula
+  msix_version: 1.0.0.0
+  # certificate_path: C:\<PathToCertificate>\<MyCertificate.pfx>
+  # certificate_password: 1234 (require if using .pfx certificate)
+  # publisher: CN=My Company, O=My Company, L=Berlin, S=Berlin, C=DE
+  # logo_path: C:\<PathToIcon>\<Logo.png>
+  # start_menu_icon_path: C:\<PathToIcon>\<Icon.png>
+  # tile_icon_path: C:\<PathToIcon>\<Icon.png>
+  # vs_generated_images_folder_path: C:\<PathToFolder>\Images
+  # icons_background_color: transparent (or some color like: '#ffffff')
+  architecture: x86
+  # capabilities: 'internetClient,location,microphone,webcam'

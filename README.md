@@ -1,16 +1,10 @@
-# auto_aula
+# Auto Aula
 
-A new Flutter project.
+Assista aulas online automáticamente 
 
-## Getting Started
+## Instalação
+- Vá para os `releases` e baixe a versão mais recente.
+- O programa estará dentro um arquivo `.zip`, é só extrair ele (descompactar) dentro da pasta que você quiser 
+- Adicionar atalho à área de trabalho (recomendado)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+No primeiro uso, você deve autorizar o chrome a abrir o zoom sozinho

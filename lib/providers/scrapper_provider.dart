@@ -13,11 +13,11 @@ import 'package:riverpod/riverpod.dart';
 @immutable
 abstract class ScrapperState {}
 
-class BrowserIdle extends ScrapperState {}
+class ScrapperIdle extends ScrapperState {}
 
-class BrowserReady extends ScrapperState {}
+class ScrapperReady extends ScrapperState {}
 
-class LaunchingBrowser extends ScrapperState {}
+class LaunchingScrapper extends ScrapperState {}
 
 enum ExamOption { a, b, c, d, e }
 
@@ -35,8 +35,8 @@ class WatchingClasses extends ScrapperState {
   final int currentClass;
 }
 
-class BrowserException extends ScrapperState {
-  BrowserException({
+class ScrapperException extends ScrapperState {
+  ScrapperException({
     required this.exception,
     required this.reason,
   });
@@ -67,11 +67,18 @@ String? get pathToChrome {
 }
 
 class ScrapperNotifier extends StateNotifier<ScrapperState> {
-  ScrapperNotifier(this._dataState) : super(BrowserIdle());
+  ScrapperNotifier(this._dataState) : super(ScrapperIdle());
+
+  /// The data used by the scrapper
   final DataState _dataState;
-  bool _initialized = false;
-  late final PageScrapper _pageScrapper;
+
+  /// The scrapper responsible for controlling the page
+  late final PageScrapper _scrapper;
+
+  /// The browser used to
   Browser? _browser;
+
+  /// Launches a new browser or returns an already open one
   Future<Browser> _createBrowser() {
     return puppeteer.launch(
       defaultViewport: null,
@@ -82,13 +89,15 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
     );
   }
 
+  /// Initializes the resources used by this [ScrapperNotifier]
   Future<void> _init() async {
+    // close the browser (in case the browser was not closed correctly)
     await _browser?.close();
     _browser = await _createBrowser();
     final page = await _browser!.newPage();
     page.defaultTimeout = const Duration(minutes: 2);
     final day = DateTime.now().weekday;
-    _pageScrapper = PageScrapper(
+    _scrapper = PageScrapper(
       dataState: _dataState,
       page: page,
       onlineClasses: [
@@ -104,24 +113,23 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
   }
 
   Future<void> start() async {
-    final hasError = state is BrowserException;
-    state = LaunchingBrowser();
-    if (!_initialized) {
+    final hasError = state is ScrapperException;
+    state = LaunchingScrapper();
+    if (_browser == null) {
       await _init();
-      _initialized = true;
     }
     if (hasError) {
-      await _browser!.close();
+      await _browser?.close();
       _browser = await _createBrowser();
-      await _pageScrapper.reset(newPage: await _browser!.newPage());
+      await _scrapper.reset(newPage: await _browser!.newPage());
     }
     try {
-      final classStream = _pageScrapper.watchClasses();
+      final classStream = _scrapper.watchClasses();
       await for (final classNumber in classStream) {
         state = WatchingClasses(classNumber);
       }
     } catch (e) {
-      state = BrowserException(exception: e, reason: '');
+      state = ScrapperException(exception: e, reason: '');
     }
   }
 

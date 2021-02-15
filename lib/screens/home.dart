@@ -71,7 +71,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
               ),
             );
           }
-          if (browserState is BrowserIdle) {
+          if (browserState is ScrapperIdle) {
             return Center(
               child: OutlinedButton(
                 onPressed: () {
@@ -80,7 +80,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
                 child: const Text('Assistir às aulas'),
               ),
             );
-          } else if (browserState is LaunchingBrowser) {
+          } else if (browserState is LaunchingScrapper) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -104,7 +104,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
                 ],
               ),
             );
-          } else if (browserState is BrowserException) {
+          } else if (browserState is ScrapperException) {
             return Center(
               child: Column(
                 children: [

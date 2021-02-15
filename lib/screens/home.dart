@@ -9,15 +9,15 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Auto Aula'),
+        title: const Text('Auto Aula'),
       ),
-      body: _OnlineProgress(),
+      body: const _OnlineProgress(),
     );
   }
 }
 
 class _OnlineProgress extends StatefulWidget {
-  _OnlineProgress();
+  const _OnlineProgress();
   @override
   __OnlineProgressState createState() => __OnlineProgressState();
 }
@@ -41,7 +41,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
         final dataNotifier = watch(dataProvider);
         final dataState = watch(dataProvider.state);
         if (dataState is InitialData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (dataState is UserData) {
@@ -51,21 +51,21 @@ class __OnlineProgressState extends State<_OnlineProgress> {
                 children: [
                   TextField(
                     controller: userController,
-                    decoration: InputDecoration(labelText: 'Matrícula'),
+                    decoration: const InputDecoration(labelText: 'Matrícula'),
                   ),
                   TextField(
                     controller: passwordController,
-                    decoration: InputDecoration(labelText: 'Senha'),
+                    decoration: const InputDecoration(labelText: 'Senha'),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    child: Text('Pronto'),
                     onPressed: () {
                       dataNotifier.changeLogin(
                         user: userController.text,
                         password: passwordController.text,
                       );
                     },
+                    child: const Text('Pronto'),
                   )
                 ],
               ),
@@ -74,14 +74,14 @@ class __OnlineProgressState extends State<_OnlineProgress> {
           if (browserState is BrowserIdle) {
             return Center(
               child: OutlinedButton(
-                child: Text('Assistir às aulas'),
                 onPressed: () {
                   browserNotifier.start();
                 },
+                child: const Text('Assistir às aulas'),
               ),
             );
           } else if (browserState is LaunchingBrowser) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (browserState is WatchingClasses) {
@@ -98,8 +98,8 @@ class __OnlineProgressState extends State<_OnlineProgress> {
                     ListTile(
                       title: Text('Aula ${i + 1}'),
                       trailing: currentClass >= i
-                          ? Icon(Icons.done)
-                          : CircularProgressIndicator(),
+                          ? const Icon(Icons.done)
+                          : const CircularProgressIndicator(),
                     )
                 ],
               ),
@@ -108,18 +108,18 @@ class __OnlineProgressState extends State<_OnlineProgress> {
             return Center(
               child: Column(
                 children: [
-                  Text('Ocorreu um erro: '),
+                  const Text('Ocorreu um erro: '),
                   Text(browserState.exception.toString()),
                   TextButton(
                     onPressed: () => browserNotifier.start(),
-                    child: Text('Tentar novamente'),
+                    child: const Text('Tentar novamente'),
                   )
                 ],
               ),
             );
           }
         }
-        return Center(child: Text('Erro'));
+        return const Center(child: Text('Erro'));
       },
     );
   }

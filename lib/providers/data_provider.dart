@@ -13,8 +13,8 @@ class UserData extends DataState {
   UserData({required this.user, required this.password});
   factory UserData._fromMap(Map<dynamic, dynamic> map) {
     return UserData(
-      user: map['user'],
-      password: map['password'],
+      user: map['user'] as String?,
+      password: map['password'] as String?,
     );
   }
   final String? user, password;

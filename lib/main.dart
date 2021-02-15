@@ -1,3 +1,4 @@
+// @dart=2.10
 import 'dart:io';
 
 import 'package:auto_aula/screens/home.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           ),
           darkTheme: ThemeData(
             primarySwatch: Colors.cyan,
+            brightness: Brightness.dark,
           ),
           home: Home()),
     );

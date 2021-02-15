@@ -79,7 +79,7 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
   Browser? _browser;
 
   /// Launches a new browser or returns an already open one
-  Future<Browser> _createBrowser() {
+  Future<Browser> _openBrowser() {
     return puppeteer.launch(
       defaultViewport: null,
       headless: false,
@@ -91,9 +91,7 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
 
   /// Initializes the resources used by this [ScrapperNotifier]
   Future<void> _init() async {
-    // close the browser (in case the browser was not closed correctly)
-    await _browser?.close();
-    _browser = await _createBrowser();
+    _browser = await _openBrowser();
     final page = await _browser!.newPage();
     page.defaultTimeout = const Duration(minutes: 2);
     final day = DateTime.now().weekday;
@@ -113,17 +111,17 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
   }
 
   Future<void> start() async {
-    final hasError = state is ScrapperException;
-    state = LaunchingScrapper();
-    if (_browser == null) {
-      await _init();
-    }
-    if (hasError) {
-      await _browser?.close();
-      _browser = await _createBrowser();
-      await _scrapper.reset(newPage: await _browser!.newPage());
-    }
     try {
+      final hasError = state is ScrapperException;
+      state = LaunchingScrapper();
+      if (_browser == null) {
+        await _init();
+      }
+      if (hasError) {
+        await _browser?.close();
+        _browser = await _openBrowser();
+        await _scrapper.reset(newPage: await _browser!.newPage());
+      }
       final classStream = _scrapper.watchClasses();
       await for (final classNumber in classStream) {
         state = WatchingClasses(classNumber);

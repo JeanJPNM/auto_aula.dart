@@ -1,4 +1,4 @@
-import 'package:auto_aula/providers/browser_provider.dart';
+import 'package:auto_aula/providers/scrapper_provider.dart';
 import 'package:auto_aula/providers/data_provider.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe

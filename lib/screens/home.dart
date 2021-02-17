@@ -5,83 +5,76 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginDialog extends StatefulWidget {
-  final DataNotifier dataNotifier;
-
-  const LoginDialog({Key? key, required this.dataNotifier}) : super(key: key);
+class InputDialog extends StatefulWidget {
+  const InputDialog({
+    required this.title,
+    this.initialText,
+    this.inputLabel,
+  });
+  final Widget title;
+  final String? initialText;
+  final String? inputLabel;
   @override
-  _LoginDialogState createState() => _LoginDialogState();
+  _InputDialogState createState() => _InputDialogState();
 }
 
-class _LoginDialogState extends State<LoginDialog> {
-  late TextEditingController userController, passwordController;
+class _InputDialogState extends State<InputDialog> {
+  late TextEditingController controller;
   @override
   void initState() {
-    userController = TextEditingController();
-    passwordController = TextEditingController();
+    controller = TextEditingController(text: widget.initialText);
     super.initState();
   }
 
   @override
   void dispose() {
-    userController.dispose();
-    passwordController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Informe o novo login'),
+      title: widget.title,
       actions: [
         TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           child: const Text('Cancelar'),
         ),
-        const Spacer(),
         TextButton(
-          onPressed: () {
-            String? user = userController.text;
-            String? password = passwordController.text;
-            if (user.isEmpty) user = null;
-            if (password.isEmpty) password = null;
-            widget.dataNotifier.changeLogin(
-              user: user,
-              password: password,
-            );
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context, controller.text),
           child: const Text('Pronto'),
-        )
+        ),
       ],
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: userController,
-            decoration: const InputDecoration(labelText: 'Matrícula'),
-          ),
-          TextField(
-            controller: passwordController,
-            decoration: const InputDecoration(labelText: 'senha'),
-          )
-        ],
+      content: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: widget.inputLabel,
+        ),
       ),
     );
   }
 }
 
 class Home extends StatelessWidget {
-  void _changeLogin(BuildContext context, DataNotifier dataNotifier) {
-    showDialog(
+  Future<void> _changeUser(
+      BuildContext context, DataNotifier dataNotifier) async {
+    final user = await showDialog(
         context: context,
         builder: (context) {
-          return LoginDialog(
-            dataNotifier: dataNotifier,
-          );
-        });
+          return const InputDialog(title: Text('Nova matrícula'));
+        }) as String?;
+    await dataNotifier.changeLogin(user: user);
+  }
+
+  Future<void> _changePassword(
+      BuildContext context, DataNotifier dataNotifier) async {
+    final password = await showDialog(
+        context: context,
+        builder: (context) {
+          return const InputDialog(title: Text('Nova senha'));
+        }) as String?;
+    await dataNotifier.changeLogin(password: password);
   }
 
   void _changeTheme(bool isDark, ThemeNotifier themeNotifier) {
@@ -104,19 +97,31 @@ class Home extends StatelessWidget {
             builder: (context, watch, _) {
               final themeNotifier = watch(themeProvider);
               final theme = watch(themeProvider.state);
-              return SwitchListTile(
-                value: theme.brightness == Brightness.dark,
-                title: const Text('Tema escuro'),
-                onChanged: (value) => _changeTheme(value, themeNotifier),
+              return Center(
+                child: SwitchListTile(
+                  value: theme.brightness == Brightness.dark,
+                  title: const Text('Tema escuro'),
+                  onChanged: (value) => _changeTheme(value, themeNotifier),
+                ),
               );
             },
           ),
           const SizedBox(height: 20),
           Consumer(builder: (context, watch, _) {
             final dataNotifier = watch(dataProvider);
-            return ElevatedButton(
-              onPressed: () => _changeLogin(context, dataNotifier),
-              child: const Text('Mudar login'),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: () => _changeUser(context, dataNotifier),
+                  child: const Text('Mudar matrícula'),
+                ),
+                const SizedBox(height: 20),
+                OutlinedButton(
+                  onPressed: () => _changePassword(context, dataNotifier),
+                  child: const Text('Mudar senha'),
+                ),
+              ],
             );
           }),
           const SizedBox(height: 20),
@@ -144,7 +149,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
   }
 
   String? _convertErrorMessage(String message) {
-    final Map<Pattern, String> messages = {
+    final messages = <Pattern, String>{
       'browser has disconnected': 'Conexão com o navegador perdida!',
       'Login Inválido': 'Login Inválido!',
       'Websocket url not found':
@@ -211,7 +216,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
             );
           } else if (browserState is WatchingClasses) {
             final day = DateTime.now().weekday;
-            int start = 0, currentClass = browserState.currentClass;
+            var start = 0, currentClass = browserState.currentClass;
             if (day == 2 || day == 4) {
               start++;
               currentClass++;
@@ -231,7 +236,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
             );
           } else if (browserState is ScrapperException) {
             final exception = browserState.exception;
-            late final String message = exception.toString();
+            late final message = exception.toString();
             return Center(
               child: Column(
                 children: [

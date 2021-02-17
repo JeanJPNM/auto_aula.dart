@@ -20,8 +20,7 @@ Future<void> main() async {
 class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
-  // ignore: type_annotate_public_apis
-  Widget build(BuildContext context, watch) {
+  Widget build(BuildContext context, ScopedReader watch) {
     final theme = watch(themeProvider.state);
     return MaterialApp(
       title: 'Flutter Demo',

@@ -8,7 +8,7 @@ final _lightTheme = ThemeData(
 
 final _darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primarySwatch: Colors.blue,
+  primarySwatch: Colors.cyan,
 );
 
 final themeProvider = StateNotifierProvider((_) => ThemeNotifier());

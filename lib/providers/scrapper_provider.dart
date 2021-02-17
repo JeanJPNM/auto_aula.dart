@@ -126,6 +126,7 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
       await for (final classNumber in classStream) {
         state = WatchingClasses(classNumber);
       }
+      await _browser!.close();
     } catch (e) {
       state = ScrapperException(exception: e, reason: '');
     }

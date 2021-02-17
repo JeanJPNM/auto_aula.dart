@@ -76,11 +76,11 @@ class PageScrapper {
     final now = DateTime.now();
     if (now.isAfter(onlineClass.end)) return;
     await Future.delayed(onlineClass.start.difference(now));
-    String currentLink = '';
+    var currentLink = '';
     while (true) {
       await page.reload();
       final links = await page.$$('a.link-aula');
-      int index = 0;
+      var index = 0;
       if (links.length > 1) {
         if (currentLab == LabClass.bio) {
           index = 1;

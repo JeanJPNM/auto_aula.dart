@@ -172,9 +172,8 @@ class __OnlineProgressState extends State<_OnlineProgress> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, _) {
-        final browserNotifier = watch(browserProvider);
-        final browserState = watch(browserProvider.state);
-        final dataNotifier = watch(dataProvider);
+        final scrapperNotifier = watch(browserProvider);
+        final scrapperState = watch(browserProvider.state);
         final dataState = watch(dataProvider.state);
         if (dataState is InitialData) {
           return const Center(

@@ -155,6 +155,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
   String? _convertErrorMessage(String message) {
     final messages = <Pattern, String>{
       'browser has disconnected': 'Conexão com o navegador perdida!',
+      'Session closed': 'A sessão foi fechada!',
       'Login Inválido': 'Login Inválido!',
       'Websocket url not found':
           'Uma sessão anterior do navegador está bloqueando o programa!'
@@ -245,8 +246,18 @@ class __OnlineProgressState extends State<_OnlineProgress> {
               child: Column(
                 children: [
                   const Text('Ocorreu um erro: '),
-                  Text(_convertErrorMessage(message) ?? message),
-                  ElevatedButton(
+                  Card(
+                    color: Theme.of(context).errorColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        _convertErrorMessage(message) ?? message,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
                     onPressed: () => browserNotifier.start(),
                     child: const Text('Tentar novamente'),
                   )

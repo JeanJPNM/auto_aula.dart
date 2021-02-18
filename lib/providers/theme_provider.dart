@@ -1,3 +1,4 @@
+import 'package:auto_aula/util/persistent_state_notifier.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,7 @@ ThemeData get _darkTheme => ThemeData(
 
 final themeProvider = StateNotifierProvider((_) => ThemeNotifier());
 
-class ThemeNotifier extends StateNotifier<ThemeData> {
+class ThemeNotifier extends PersistentStateNotifier<ThemeData> {
   ThemeNotifier() : super(_lightTheme);
   void useLightTheme() {
     if (state.brightness == Brightness.light) return;
@@ -23,5 +24,23 @@ class ThemeNotifier extends StateNotifier<ThemeData> {
   void useDarkTheme() {
     if (state.brightness == Brightness.dark) return;
     state = _darkTheme;
+  }
+
+  @override
+  ThemeData fromMap(Map<String, dynamic> map) {
+    if (map['theme'] == 'dark') {
+      return _darkTheme;
+    } else {
+      return _lightTheme;
+    }
+  }
+
+  @override
+  Map<String, dynamic> toMap(ThemeData state) {
+    var theme = 'light';
+    if (state.brightness == Brightness.dark) theme = 'dark';
+    return {
+      'theme': theme,
+    };
   }
 }

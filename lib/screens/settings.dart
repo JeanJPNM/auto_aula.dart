@@ -4,8 +4,6 @@ import 'package:auto_aula/widgets/input_dialog.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:hive/hive.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override

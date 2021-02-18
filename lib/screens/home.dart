@@ -157,6 +157,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
       'browser has disconnected': 'Conexão com o navegador perdida!',
       'Session closed': 'A sessão foi fechada!',
       'Login Inválido': 'Login Inválido!',
+      'ERR_CONNECTION_TIMED_OUT': 'A página demorou demais para responder!',
       'Websocket url not found':
           'Uma sessão anterior do navegador está bloqueando o programa!'
     };

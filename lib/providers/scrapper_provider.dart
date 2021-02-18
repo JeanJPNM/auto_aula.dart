@@ -136,7 +136,11 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
 
   @override
   Future<void> dispose() async {
-    await _browser?.close();
+    try {
+      await _browser?.close();
+    } catch (e) {
+      _browser?.disconnect();
+    }
     super.dispose();
   }
 }

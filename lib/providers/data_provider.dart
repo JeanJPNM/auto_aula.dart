@@ -1,8 +1,7 @@
+import 'package:auto_aula/util/persistent_state_notifier.dart';
 import 'package:flutter/cupertino.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:riverpod/riverpod.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:hive/hive.dart';
 
 @immutable
 abstract class DataState {}
@@ -23,19 +22,10 @@ class UserData extends DataState {
   }
 }
 
-final dataProvider = StateNotifierProvider<DataNotifier>((_) {
-  final notifier = DataNotifier();
-  notifier.init();
-  return notifier;
-});
+final dataProvider = StateNotifierProvider((_) => DataNotifier());
 
-class DataNotifier extends StateNotifier<DataState> {
+class DataNotifier extends PersistentStateNotifier<DataState> {
   DataNotifier() : super(InitialData());
-  late Box _box;
-  Future<void> init() async {
-    _box = await Hive.openBox('userData');
-    state = UserData._fromMap(_box.toMap());
-  }
 
   Future<void> changeLogin({String? user, String? password}) async {
     if (state is UserData) {
@@ -50,6 +40,19 @@ class DataNotifier extends StateNotifier<DataState> {
         user: user ?? '',
       );
     }
-    await _box.putAll((state as UserData).toMap());
+  }
+
+  @override
+  DataState fromMap(Map<String, dynamic> map) {
+    return UserData._fromMap(map);
+  }
+
+  @override
+  Map<String, dynamic> toMap(DataState state) {
+    if (state is UserData) {
+      return state.toMap();
+    } else {
+      return {};
+    }
   }
 }

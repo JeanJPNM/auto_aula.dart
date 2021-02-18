@@ -64,7 +64,9 @@ class Home extends StatelessWidget {
         builder: (context) {
           return const InputDialog(title: Text('Nova matrícula'));
         }) as String?;
-    await dataNotifier.changeLogin(user: user);
+    if (user != null) {
+      await dataNotifier.changeLogin(user: user);
+    }
   }
 
   Future<void> _changePassword(
@@ -74,7 +76,9 @@ class Home extends StatelessWidget {
         builder: (context) {
           return const InputDialog(title: Text('Nova senha'));
         }) as String?;
-    await dataNotifier.changeLogin(password: password);
+    if (password != null) {
+      await dataNotifier.changeLogin(password: password);
+    }
   }
 
   void _changeTheme(bool isDark, ThemeNotifier themeNotifier) {

@@ -68,7 +68,7 @@ class PageScrapper {
     final alertDiv = await page.$('div.alert-danger') as ElementHandle?;
     final alertSpan = await page.$('span#msgErro') as ElementHandle?;
     if (alertDiv != null || alertSpan != null) {
-      throw Exception('Login inválido');
+      throw Exception('Invalid login');
     }
   }
 

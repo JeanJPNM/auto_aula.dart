@@ -37,12 +37,15 @@ class __OnlineProgressState extends State<_OnlineProgress> {
 
   String? _convertErrorMessage(String message) {
     final messages = <Pattern, String>{
-      'browser has disconnected': 'Conexão com o navegador perdida!',
-      'Session closed': 'A sessão foi fechada!',
-      'Login Inválido': 'Login Inválido!',
-      'ERR_CONNECTION_TIMED_OUT': 'A página demorou demais para responder!',
+      'browser has disconnected':
+          'Conexão com o navegador perdida, tente novamente.',
+      'Session closed': 'A sessão foi fechada, tente novamente.',
+      'Invalid login':
+          'Login inválido, por favor troque sua matrícula e/ou sua senha',
+      RegExp('ERR_CONNECTION_TIMED_OUT|Timeout Exceeded'):
+          'A página demorou demais para responder, tente novamente',
       'Websocket url not found':
-          'Uma sessão anterior do navegador está bloqueando o programa!'
+          'Uma sessão anterior do navegador está bloqueando o programa, por favor feche o navegador.'
     };
     for (final entry in messages.entries) {
       if (message.contains(entry.key)) {

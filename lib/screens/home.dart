@@ -112,6 +112,23 @@ class __OnlineProgressState extends State<_OnlineProgress> {
               child: ElevatedButton(
                 onPressed: () {
                   scrapperNotifier.start();
+                  if (dataState.firstAccess) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Ok'),
+                            )
+                          ],
+                          content: const Text(
+                              'Pode ser que você precise permitir que chrome abra o Zoom'),
+                        );
+                      },
+                    );
+                  }
                 },
                 child: const Text('Assistir às aulas'),
               ),

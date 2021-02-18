@@ -9,16 +9,26 @@ abstract class DataState {}
 class InitialData extends DataState {}
 
 class UserData extends DataState {
-  UserData({required this.user, required this.password});
+  UserData({
+    required this.user,
+    required this.password,
+    this.firstAccess = true,
+  });
   factory UserData._fromMap(Map<dynamic, dynamic> map) {
     return UserData(
       user: map['user'] as String?,
       password: map['password'] as String?,
+      firstAccess: map['firstAccess'] as bool? ?? true,
     );
   }
   final String? user, password;
-  Map<String, String?> toMap() {
-    return {'user': user, 'password': password};
+  final bool firstAccess;
+  Map<String, dynamic> toMap() {
+    return {
+      'user': user,
+      'password': password,
+      'firstAccess': false,
+    };
   }
 }
 
@@ -33,11 +43,13 @@ class DataNotifier extends PersistentStateNotifier<DataState> {
       state = UserData(
         password: password ?? s.password,
         user: user ?? s.user,
+        firstAccess: false,
       );
     } else {
       state = UserData(
         password: password ?? '',
         user: user ?? '',
+        firstAccess: false,
       );
     }
   }

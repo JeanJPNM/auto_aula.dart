@@ -118,7 +118,9 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
         await _init();
       }
       if (hasError) {
-        await _browser?.close();
+        if (_browser?.isConnected ?? false) {
+          _browser?.close();
+        }
         _browser = await _openBrowser();
         await _scrapper.reset(newPage: await _browser!.newPage());
       }

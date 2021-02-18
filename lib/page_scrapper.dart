@@ -102,7 +102,7 @@ class PageScrapper {
         await page.waitForSelector('div[role=button]');
         await page.click('div[role=button]');
         await Future.delayed(const Duration(seconds: 20));
-        await page.goto(Urls.home);
+        await page.goto(Urls.onlineClasses);
         break;
       }
       await Future.delayed(const Duration(seconds: 5));

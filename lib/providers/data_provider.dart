@@ -50,7 +50,6 @@ class DataNotifier extends StateNotifier<DataState> {
         user: user ?? '',
       );
     }
-    assert(state is UserData);
     await _box.putAll((state as UserData).toMap());
   }
 }

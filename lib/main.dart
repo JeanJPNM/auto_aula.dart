@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:auto_aula/providers/theme_provider.dart';
-import 'package:auto_aula/screens/home.dart';
+import 'package:auto_aula/screen_host.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +25,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme,
-      home: Home(),
+      home: ScreenHost(),
     );
   }
 }

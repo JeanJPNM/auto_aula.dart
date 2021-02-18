@@ -1,135 +1,18 @@
 import 'package:auto_aula/providers/scrapper_provider.dart';
 import 'package:auto_aula/providers/data_provider.dart';
-import 'package:auto_aula/providers/theme_provider.dart';
+import 'package:auto_aula/widgets/input_dialog.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class InputDialog extends StatefulWidget {
-  const InputDialog({
-    required this.title,
-    this.initialText,
-    this.inputLabel,
-  });
-  final Widget title;
-  final String? initialText;
-  final String? inputLabel;
+class Home extends ConsumerWidget {
   @override
-  _InputDialogState createState() => _InputDialogState();
-}
-
-class _InputDialogState extends State<InputDialog> {
-  late TextEditingController controller;
-  @override
-  void initState() {
-    controller = TextEditingController(text: widget.initialText);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: widget.title,
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(context, controller.text),
-          child: const Text('Pronto'),
-        ),
-      ],
-      content: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: widget.inputLabel,
-        ),
-      ),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  Future<void> _changeUser(
-      BuildContext context, DataNotifier dataNotifier) async {
-    final user = await showDialog(
-        context: context,
-        builder: (context) {
-          return const InputDialog(title: Text('Nova matrícula'));
-        }) as String?;
-    if (user != null) {
-      await dataNotifier.changeLogin(user: user);
-    }
-  }
-
-  Future<void> _changePassword(
-      BuildContext context, DataNotifier dataNotifier) async {
-    final password = await showDialog(
-        context: context,
-        builder: (context) {
-          return const InputDialog(title: Text('Nova senha'));
-        }) as String?;
-    if (password != null) {
-      await dataNotifier.changeLogin(password: password);
-    }
-  }
-
-  void _changeTheme(bool isDark, ThemeNotifier themeNotifier) {
-    if (isDark) {
-      themeNotifier.useDarkTheme();
-    } else {
-      themeNotifier.useLightTheme();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Auto Aula'),
-      ),
       body: Column(
-        children: [
-          Consumer(
-            builder: (context, watch, _) {
-              final themeNotifier = watch(themeProvider);
-              final theme = watch(themeProvider.state);
-              return Center(
-                child: SwitchListTile(
-                  value: theme.brightness == Brightness.dark,
-                  title: const Text('Tema escuro'),
-                  onChanged: (value) => _changeTheme(value, themeNotifier),
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-          Consumer(builder: (context, watch, _) {
-            final dataNotifier = watch(dataProvider);
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton(
-                  onPressed: () => _changeUser(context, dataNotifier),
-                  child: const Text('Mudar matrícula'),
-                ),
-                const SizedBox(height: 20),
-                OutlinedButton(
-                  onPressed: () => _changePassword(context, dataNotifier),
-                  child: const Text('Mudar senha'),
-                ),
-              ],
-            );
-          }),
-          const SizedBox(height: 20),
-          const _OnlineProgress(),
+        children: const [
+          SizedBox(height: 20),
+          _OnlineProgress(),
         ],
       ),
     );
@@ -168,60 +51,75 @@ class __OnlineProgressState extends State<_OnlineProgress> {
     }
   }
 
+  Future<void> _getUserAndPassword(
+    BuildContext context,
+    DataNotifier dataNotifier,
+  ) async {
+    final user = await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const InputDialog(
+          title: Text('Digite sua matrícula'),
+          canCancel: false,
+        );
+      },
+    ) as String;
+    final password = await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const InputDialog(
+          title: Text('Digite sua senha'),
+          canCancel: false,
+        );
+      },
+    ) as String;
+    await dataNotifier.changeLogin(
+      user: user,
+      password: password,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, _) {
         final scrapperNotifier = watch(browserProvider);
         final scrapperState = watch(browserProvider.state);
+        final dataNotifier = watch(dataProvider);
         final dataState = watch(dataProvider.state);
         if (dataState is InitialData) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (dataState is UserData) {
-          if (dataState.user == null || dataState.password == null) {
-            return Center(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: userController,
-                    decoration: const InputDecoration(labelText: 'Matrícula'),
-                  ),
-                  TextField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(labelText: 'Senha'),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      dataNotifier.changeLogin(
-                        user: userController.text,
-                        password: passwordController.text,
-                      );
-                    },
-                    child: const Text('Pronto'),
-                  )
-                ],
-              ),
-            );
-          }
-          if (browserState is ScrapperIdle) {
+          if (scrapperState is ScrapperIdle) {
+            if (dataState.user == null || dataState.password == null) {
+              return Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    _getUserAndPassword(context, dataNotifier);
+                  },
+                  child: const Text('Salvar Marícula e Senha'),
+                ),
+              );
+            }
             return Center(
               child: ElevatedButton(
                 onPressed: () {
-                  browserNotifier.start();
+                  scrapperNotifier.start();
                 },
                 child: const Text('Assistir às aulas'),
               ),
             );
-          } else if (browserState is LaunchingScrapper) {
+          } else if (scrapperState is LaunchingScrapper) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (browserState is WatchingClasses) {
+          } else if (scrapperState is WatchingClasses) {
             final day = DateTime.now().weekday;
-            var start = 0, currentClass = browserState.currentClass;
+            var start = 0, currentClass = scrapperState.currentClass;
             if (day == 2 || day == 4) {
               start++;
               currentClass++;
@@ -239,8 +137,8 @@ class __OnlineProgressState extends State<_OnlineProgress> {
                 ],
               ),
             );
-          } else if (browserState is ScrapperException) {
-            final exception = browserState.exception;
+          } else if (scrapperState is ScrapperException) {
+            final exception = scrapperState.exception;
             late final message = exception.toString();
             return Center(
               child: Column(
@@ -258,7 +156,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
                   ),
                   const SizedBox(height: 20),
                   TextButton(
-                    onPressed: () => browserNotifier.start(),
+                    onPressed: () => scrapperNotifier.start(),
                     child: const Text('Tentar novamente'),
                   )
                 ],

@@ -1,1 +1,0 @@
-enum LabClass { bio, info }

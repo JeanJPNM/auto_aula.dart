@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'screens/home.dart';
 import 'screens/settings.dart';
-import 'package:flutter/material.dart';
 
 class ScreenHost extends StatefulWidget {
   @override

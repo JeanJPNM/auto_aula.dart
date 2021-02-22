@@ -1,12 +1,13 @@
 // @dart=2.10
 import 'dart:io';
 
-import 'providers/theme_provider.dart';
-import 'screen_host.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:path/path.dart';
+
+import 'providers/theme_provider.dart';
+import 'screen_host.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

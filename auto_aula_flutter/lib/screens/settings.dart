@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/data_provider.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/input_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override

@@ -1,8 +1,9 @@
-import '../providers/scrapper_provider.dart';
-import '../providers/data_provider.dart';
-import '../widgets/input_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/data_provider.dart';
+import '../providers/scrapper_provider.dart';
+import '../widgets/input_dialog.dart';
 
 class Home extends ConsumerWidget {
   @override

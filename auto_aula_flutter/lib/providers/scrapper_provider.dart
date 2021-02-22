@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:auto_aula_core/auto_aula_core.dart';
-import '../providers/data_provider.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:puppeteer/puppeteer.dart';
 import 'package:riverpod/riverpod.dart';
+
+import '../providers/data_provider.dart';
 
 @immutable
 abstract class ScrapperState {}

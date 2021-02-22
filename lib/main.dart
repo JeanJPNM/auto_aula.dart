@@ -4,9 +4,7 @@ import 'dart:io';
 import 'package:auto_aula/providers/theme_provider.dart';
 import 'package:auto_aula/screen_host.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:hive/hive.dart';
 import 'package:path/path.dart';
 

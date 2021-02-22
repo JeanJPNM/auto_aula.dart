@@ -2,7 +2,6 @@ import 'package:auto_aula/providers/data_provider.dart';
 import 'package:auto_aula/providers/theme_provider.dart';
 import 'package:auto_aula/widgets/input_dialog.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends StatefulWidget {

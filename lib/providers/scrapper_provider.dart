@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:puppeteer/puppeteer.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:riverpod/riverpod.dart';
 
 @immutable

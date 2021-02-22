@@ -78,13 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
-  dart_app_data:
-    dependency: "direct main"
-    description:
-      name: dart_app_data
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -117,7 +110,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.4"
+    version: "0.13.0-nullsafety.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -129,7 +122,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0"
+    version: "0.13.0-nullsafety.0"
   hive:
     dependency: "direct main"
     description:
@@ -164,7 +157,7 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "4.0.0"
   lint:
     dependency: "direct dev"
     description:
@@ -292,12 +285,12 @@ packages:
     source: hosted
     version: "1.22.0"
   riverpod:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.4"
+    version: "0.13.0-nullsafety.3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -323,7 +316,7 @@ packages:
       name: state_notifier
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.0"
   stream_channel:
     dependency: transitive
     description:
@@ -388,5 +381,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.12.0-0.0 <3.0.0"
+  dart: ">=2.12.0-29.10.beta <3.0.0"
   flutter: ">=1.20.0"

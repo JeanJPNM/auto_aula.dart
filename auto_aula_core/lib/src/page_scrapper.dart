@@ -153,7 +153,19 @@ class PageScrapper {
     await page.clickAndWaitForNavigation(
       'ul#content_listContainer li:nth-child(${bimester + 1}) a',
     );
-    // todo: discover the selector for the link to the test
+    final img = await page.$('img[alt=Teste]');
+    final container = (await img.$x('..'))[0];
+    final link = await container.$('a');
+    Future.wait([
+      link.click(),
+      page.waitForNavigation(),
+    ]);
+  }
+
+  Future<void> fillExam(Map<int, String> answers) async {
+    const indexes = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4};
+    var id =
+        (await (await page.$('input.multiple-choice-question')).property('id'));
   }
 
   //

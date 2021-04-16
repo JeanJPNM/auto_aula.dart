@@ -1,0 +1,26 @@
+{
+  // Use o IntelliSense para saber mais sobre os atributos possíveis.
+  // Focalizar para exibir as descrições dos atributos existentes.
+  // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "auto_aula_console",
+      "cwd": "auto_aula_console",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "auto_aula_core",
+      "cwd": "auto_aula_core",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "auto_aula_flutter",
+      "cwd": "auto_aula_flutter",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
+}

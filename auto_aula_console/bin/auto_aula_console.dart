@@ -19,7 +19,7 @@ Future<void> run() async {
   final dataNotifier = container.read(dataProvider);
   container.read(browserProvider);
   // workaround for concurrent access
-  await Future.delayed(const Duration(seconds: 1));
+  await Future.delayed(const Duration(seconds: 2));
   dataNotifier.addListener((state) {
     final data = container.read(dataProvider.state);
     if (data is InitialData) {

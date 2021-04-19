@@ -11,7 +11,8 @@ ThemeData get _darkTheme => ThemeData(
       primarySwatch: Colors.cyan,
     );
 
-final themeProvider = StateNotifierProvider((_) => ThemeNotifier());
+final themeProvider =
+    StateNotifierProvider<ThemeNotifier, ThemeData>((_) => ThemeNotifier());
 
 class ThemeNotifier extends PersistentStateNotifier<ThemeData> {
   ThemeNotifier() : super(_lightTheme);

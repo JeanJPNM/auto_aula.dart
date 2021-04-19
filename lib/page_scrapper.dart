@@ -60,13 +60,13 @@ class PageScrapper {
   }
 
   Future<void> _login(String user, String password) async {
-    final loginButton = await page.$('#login') as ElementHandle?;
+    final loginButton = await page.$OrNull('#login');
     if (loginButton == null) return;
     await page.type('#matricula', user);
     await page.type('#senha', password);
     await page.clickAndWaitForNavigation('#login', wait: Until.networkIdle);
-    final alertDiv = await page.$('div.alert-danger') as ElementHandle?;
-    final alertSpan = await page.$('span#msgErro') as ElementHandle?;
+    final alertDiv = await page.$OrNull('div.alert-danger');
+    final alertSpan = await page.$OrNull('span#msgErro');
     if (alertDiv != null || alertSpan != null) {
       throw Exception('Invalid login');
     }
@@ -116,7 +116,7 @@ class PageScrapper {
     await page.goto(Urls.onlineClasses);
     for (var i = 0; i < onlineClasses.length; i++) {
       final onlineClass = onlineClasses[i];
-      if (await page.$('#login') != null) {
+      if (await page.$OrNull('#login') != null) {
         await page.goto(Urls.home);
         await _login(state.user!, state.password!);
         await page.goto(Urls.onlineClasses);

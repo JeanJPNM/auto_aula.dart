@@ -43,9 +43,10 @@ class ScrapperException extends ScrapperState {
   final Object exception;
 }
 
-final browserProvider = StateNotifierProvider<ScrapperNotifier>(
+final browserProvider = StateNotifierProvider<ScrapperNotifier, ScrapperState>(
   (ref) {
-    final browserNotifier = ScrapperNotifier(ref.watch(dataProvider.state));
+    final data = ref.watch(dataProvider);
+    final browserNotifier = ScrapperNotifier(data);
     return browserNotifier;
   },
 );

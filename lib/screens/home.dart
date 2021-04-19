@@ -87,10 +87,10 @@ class __OnlineProgressState extends State<_OnlineProgress> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, _) {
-        final scrapperNotifier = watch(browserProvider);
-        final scrapperState = watch(browserProvider.state);
-        final dataNotifier = watch(dataProvider);
-        final dataState = watch(dataProvider.state);
+        final scrapperNotifier = watch(browserProvider.notifier);
+        final scrapperState = watch(browserProvider);
+        final dataNotifier = watch(dataProvider.notifier);
+        final dataState = watch(dataProvider);
         if (dataState is InitialData) {
           return const Center(
             child: CircularProgressIndicator(),

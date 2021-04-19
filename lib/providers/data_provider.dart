@@ -31,7 +31,8 @@ class UserData extends DataState {
   }
 }
 
-final dataProvider = StateNotifierProvider((_) => DataNotifier());
+final dataProvider =
+    StateNotifierProvider<DataNotifier, DataState>((_) => DataNotifier());
 
 class DataNotifier extends PersistentStateNotifier<DataState> {
   DataNotifier() : super(InitialData());

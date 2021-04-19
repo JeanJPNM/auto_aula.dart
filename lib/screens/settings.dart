@@ -47,8 +47,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return ListView(
       children: [
         Consumer(builder: (context, watch, _) {
-          final themeNotifier = watch(themeProvider);
-          final themeState = watch(themeProvider.state);
+          final themeNotifier = watch(themeProvider.notifier);
+          final themeState = watch(themeProvider);
           return SwitchListTile(
             value: themeState.brightness == Brightness.dark,
             title: const Text('Tema escuro'),
@@ -57,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }),
         const SizedBox(height: 20),
         Consumer(builder: (context, watch, _) {
-          final dataNotifier = watch(dataProvider);
+          final dataNotifier = watch(dataProvider.notifier);
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

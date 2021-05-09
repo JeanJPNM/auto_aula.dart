@@ -37,8 +37,7 @@ class ThemeNotifier extends PersistentStateNotifier<ThemeData> {
 
   @override
   Map<String, dynamic> toMap(ThemeData state) {
-    var theme = 'light';
-    if (state.brightness == Brightness.dark) theme = 'dark';
+    final theme = state.brightness == Brightness.dark ? 'dark' : 'light';
     return {
       'theme': theme,
     };

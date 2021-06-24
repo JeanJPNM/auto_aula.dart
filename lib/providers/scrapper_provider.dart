@@ -5,9 +5,9 @@ import 'package:auto_aula/providers/data_provider.dart';
 import 'package:auto_aula/types/online_class.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:puppeteer/puppeteer.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:desktoasts/desktoasts.dart';
 
 @immutable
 abstract class ScrapperState {}
@@ -69,11 +69,13 @@ String? get pathToChrome {
 class ScrapperNotifier extends StateNotifier<ScrapperState> {
   ScrapperNotifier(this._dataState) : super(ScrapperIdle());
 
+  static ToastService? toastService;
+
   /// The data used by the scrapper
   final DataState _dataState;
 
   /// The scrapper responsible for controlling the page
-  late final PageScrapper _scrapper;
+  PageScrapper? _scrapper;
 
   /// The browser used to
   Browser? _browser;
@@ -91,6 +93,7 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
 
   /// Initializes the resources used by this [ScrapperNotifier]
   Future<void> _init() async {
+    if (_browser != null && _scrapper != null) return;
     _browser = await _openBrowser();
     final page = await _browser!.newPage();
     page.defaultTimeout = const Duration(minutes: 2);
@@ -112,24 +115,31 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
 
   Future<void> start() async {
     try {
+      await _init();
       final hasError = state is ScrapperException;
       state = LaunchingScrapper();
-      if (_browser == null) {
-        await _init();
-      }
       if (hasError) {
         if (_browser?.isConnected ?? false) {
           _browser?.close();
         }
         _browser = await _openBrowser();
-        await _scrapper.reset(newPage: await _browser!.newPage());
+        await _scrapper!.reset(newPage: await _browser!.newPage());
       }
-      final classStream = _scrapper.watchClasses();
+      final classStream = _scrapper!.watchClasses();
       await for (final classNumber in classStream) {
         state = WatchingClasses(classNumber);
       }
       await _browser!.close();
     } catch (e) {
+      toastService ??= ToastService(
+        appName: 'Auto Aula',
+        companyName: 'JPNM',
+        productName: 'com.jeanjpnm.auto_aula',
+      );
+      toastService?.show(Toast(
+        type: ToastType.text01,
+        title: 'Erro na auto aula, por favor reinicie o programa',
+      ));
       state = ScrapperException(exception: e, reason: '');
     }
   }

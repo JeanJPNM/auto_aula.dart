@@ -25,7 +25,7 @@ abstract class PersistentStateNotifier<T> extends StateNotifier<T> {
   Future<void> _load() async {
     await _openBox();
     final data = _box!.get(databaseToken, defaultValue: {}) as Map;
-    state = fromMap(data.cast<String, dynamic>());
+    state = fromMap(Map<String, dynamic>.from(data));
   }
 
   /// Coverts [state] to a [Map] to save it in the database

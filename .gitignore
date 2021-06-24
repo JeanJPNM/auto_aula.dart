@@ -46,3 +46,4 @@ app.*.map.json
 /android/app/release
 
 .local-chromium/
+release.dart

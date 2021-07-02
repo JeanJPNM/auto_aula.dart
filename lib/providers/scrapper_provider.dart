@@ -96,10 +96,12 @@ class ScrapperNotifier extends StateNotifier<ScrapperState> {
     if (_browser != null && _scrapper != null) return;
     _browser = await _openBrowser();
     final page = await _browser!.newPage();
-    page.defaultTimeout = const Duration(minutes: 2);
+    final data = _dataState;
+    page.defaultTimeout =
+        data is UserData ? data.timeoutDuration : const Duration(minutes: 2);
     final day = DateTime.now().weekday;
     _scrapper = PageScrapper(
-      dataState: _dataState,
+      dataState: data,
       page: page,
       onlineClasses: [
         if (day != DateTime.tuesday && day != DateTime.thursday)

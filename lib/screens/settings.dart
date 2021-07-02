@@ -1,5 +1,7 @@
 import 'package:auto_aula/providers/data_provider.dart';
 import 'package:auto_aula/providers/theme_provider.dart';
+import 'package:auto_aula/util/extensions.dart';
+import 'package:auto_aula/widgets/duration_picker.dart';
 import 'package:auto_aula/widgets/input_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           return const InputDialog(title: Text('Nova matrícula'));
         }) as String?;
     if (user != null) {
-      await dataNotifier.changeLogin(user: user);
+      await dataNotifier.update(user: user);
     }
   }
 
@@ -30,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           return const InputDialog(title: Text('Nova senha'));
         }) as String?;
     if (password != null) {
-      await dataNotifier.changeLogin(password: password);
+      await dataNotifier.update(password: password);
     }
   }
 
@@ -40,6 +42,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       themeNotifier.useLightTheme();
     }
+  }
+
+  Future<void> _changeTimeout(
+    BuildContext context,
+    DataNotifier dataNotifier,
+  ) async {
+    final timeout = await showDialog<Duration?>(
+      context: context,
+      builder: (context) =>
+          const DurationPicker(title: 'Selecione o novo timeout'),
+      barrierDismissible: false,
+    );
+    if (timeout == null) return;
+    await dataNotifier.update(timeoutDuration: timeout);
   }
 
   @override
@@ -55,24 +71,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onChanged: (value) => _changeTheme(value, themeNotifier),
           );
         }),
-        const SizedBox(height: 20),
         Consumer(builder: (context, watch, _) {
           final dataNotifier = watch(dataProvider.notifier);
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () => _changeUser(context, dataNotifier),
-                child: const Text('Mudar matrícula'),
+              ListTile(
+                onTap: () => _changeUser(context, dataNotifier),
+                title: const Text('Mudar matrícula'),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _changePassword(context, dataNotifier),
-                child: const Text('Mudar senha'),
+              ListTile(
+                onTap: () => _changePassword(context, dataNotifier),
+                title: const Text('Mudar senha'),
               ),
             ],
           );
         }),
+        Consumer(
+          builder: (context, watch, _) {
+            final dataNotifier = watch(dataProvider.notifier);
+            final dataState = watch(dataProvider);
+            final duration = dataState is UserData
+                ? dataState.timeoutDuration
+                : const Duration(minutes: 1);
+            return ListTile(
+              title: const Text('Alterar a duração do tempo limite'),
+              subtitle: Text('Atual: ${duration.toLocaleString()}'),
+              onTap: () => _changeTimeout(context, dataNotifier),
+            );
+          },
+        )
       ],
     );
   }

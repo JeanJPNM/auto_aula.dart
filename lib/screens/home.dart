@@ -77,7 +77,7 @@ class __OnlineProgressState extends State<_OnlineProgress> {
         );
       },
     ) as String;
-    await dataNotifier.changeLogin(
+    await dataNotifier.update(
       user: user,
       password: password,
     );

@@ -11,6 +11,7 @@ class UserData extends DataState {
   UserData({
     required this.user,
     required this.password,
+    this.timeoutDuration = const Duration(minutes: 1),
     this.firstAccess = true,
   });
   factory UserData._fromMap(Map<dynamic, dynamic> map) {
@@ -22,6 +23,7 @@ class UserData extends DataState {
   }
   final String? user, password;
   final bool firstAccess;
+  final Duration timeoutDuration;
   Map<String, dynamic> toMap() {
     return {
       'user': user,
@@ -37,13 +39,15 @@ final dataProvider =
 class DataNotifier extends PersistentStateNotifier<DataState> {
   DataNotifier() : super(InitialData());
 
-  Future<void> changeLogin({String? user, String? password}) async {
+  Future<void> update(
+      {String? user, String? password, Duration? timeoutDuration}) async {
     if (state is UserData) {
       final s = state as UserData;
       state = UserData(
         password: password ?? s.password,
         user: user ?? s.user,
         firstAccess: false,
+        timeoutDuration: timeoutDuration ?? s.timeoutDuration,
       );
     } else {
       state = UserData(
